@@ -1,0 +1,33 @@
+{
+  "name": "halden-studio-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Halden \u2014 award-winning creative studio portfolio. Next.js + Tailwind + GSAP + Lenis + Three.js.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "serve out",
+    "preview": "serve out",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "lenis": "^1.3.11",
+    "next": "^15.4.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "three": "^0.179.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.0",
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@types/three": "^0.179.0",
+    "postcss": "^8.5.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.8.0",
+    "serve": "^14.2.4"
+  }
+}

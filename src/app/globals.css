@@ -1,0 +1,638 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------ *
+ *  Design tokens
+ * ------------------------------------------------------------------ */
+@theme {
+  --font-sans: var(--font-satoshi), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-ink: #202020;
+  --color-body: #333333;
+  --color-paper: #ffffff;
+  --color-accent: #f7c02f;
+  --color-accent-deep: #d9a516;
+  --color-mist: #f4f2ed;
+
+  --breakpoint-xs: 26rem;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Base
+ * ------------------------------------------------------------------ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --cursor-yellow: url('/assets/img/cursor-yellow.svg');
+  }
+
+  html {
+    color: var(--color-body);
+    max-width: 100%;
+    min-height: 100%;
+    background: var(--color-paper);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  *::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  body {
+    min-height: 100%;
+    font-family: var(--font-sans);
+    /* NB: no overflow on body — `overflow-x: clip` here would compute
+       `overflow-y` to `auto`, making body a scroll container and breaking
+       every `position: sticky` section inside it. */
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  img,
+  svg,
+  video,
+  canvas {
+    display: block;
+    max-width: 100%;
+  }
+
+  :focus-visible {
+    outline: 1px solid rgb(0 0 0 / 30%);
+    outline-offset: 4px;
+  }
+
+  /* Custom pointer — desktop only, exactly like the reference.
+     The URL lives in a custom property so it can carry the deployment
+     base path (see src/lib/paths.ts). */
+  @media (pointer: fine) {
+    html,
+    body {
+      cursor: var(--cursor-yellow) 2 2, auto;
+    }
+    a,
+    button,
+    [role='button'] {
+      cursor: var(--cursor-yellow) 2 2, pointer;
+    }
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-ink);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Layout helpers
+ * ------------------------------------------------------------------ */
+@utility dvh-fill {
+  height: 100dvh;
+}
+@utility svh-fill {
+  height: 100svh;
+}
+@utility lvh-fill {
+  height: 100lvh;
+}
+@utility dvh-min {
+  min-height: 100dvh;
+}
+@utility page-gutter {
+  padding-inline: clamp(20px, 4.1vw, 72px);
+}
+
+/* The reference uses a 9.27% left inset on large screens */
+@utility gutter-x {
+  padding-inline: clamp(20px, 9.27vw, 9.27%);
+}
+
+/* ------------------------------------------------------------------ *
+ *  Buttons
+ * ------------------------------------------------------------------ */
+@utility primary-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 100%;
+  min-height: 48px;
+  padding: 10px clamp(20px, 5vw, 48px);
+  border: 0;
+  border-radius: 2px;
+  background: var(--color-ink);
+  color: var(--color-accent);
+  font: 500 clamp(16px, 1.5vw, 18px) / 1.2 var(--font-sans);
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+.primary-cta:hover,
+.primary-cta:focus-visible {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+
+/* on dark backgrounds */
+.primary-cta--accent {
+  background: var(--color-accent);
+  color: var(--color-ink);
+}
+.primary-cta--accent:hover,
+.primary-cta--accent:focus-visible {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+@utility ghost-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid currentColor;
+  font: 500 clamp(15px, 1.2vw, 17px) / 1.2 var(--font-sans);
+  transition:
+    opacity 0.3s,
+    gap 0.3s;
+}
+.ghost-cta:hover {
+  gap: 16px;
+  opacity: 0.7;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Mono eyebrow label
+ * ------------------------------------------------------------------ */
+@utility mono-label {
+  font: 400 clamp(10px, 0.72vw, 12px) / 1 var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Section title (giant)
+ * ------------------------------------------------------------------ */
+@utility section-title {
+  font-size: clamp(42px, 7.8125vw, 150px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Keyframes
+ * ------------------------------------------------------------------ */
+@keyframes marquee-x {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@utility animate-marquee {
+  animation: marquee-x var(--marquee-duration, 40s) linear infinite;
+}
+@utility animate-float {
+  animation: float-y 6s ease-in-out infinite;
+}
+@utility animate-pulse-soft {
+  animation: pulse-soft 2.4s ease-in-out infinite;
+}
+@utility animate-spin-slow {
+  animation: spin-slow 18s linear infinite;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Why us
+ * ------------------------------------------------------------------ */
+@layer components {
+  .why-us-section {
+    position: relative;
+    height: 378svh;
+    width: 100%;
+    color: #fff;
+    font-family: var(--font-sans);
+  }
+  .why-us-viewport {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+  }
+  .why-us-steps {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .why-us-step {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+    opacity: 0;
+  }
+  .why-us-step-1 {
+    visibility: visible;
+    opacity: 1;
+  }
+  .why-us-number,
+  .why-us-caption,
+  .why-us-copy {
+    position: absolute;
+    margin: 0;
+  }
+  .why-us-number {
+    font-size: clamp(72px, 7.8125vw, 150px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.36;
+    white-space: nowrap;
+  }
+  .why-us-caption,
+  .why-us-copy {
+    font-size: clamp(16px, 1.25vw, 24px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.4;
+  }
+  .why-us-step-1 .why-us-number {
+    left: 9.27%;
+    top: 54.91%;
+  }
+  .why-us-step-1 .why-us-caption {
+    left: 9.27%;
+    top: 71.39%;
+  }
+  .why-us-step-2 .why-us-number {
+    left: 68.23%;
+    top: 57.5%;
+  }
+  .why-us-step-2 .why-us-caption {
+    left: 68.23%;
+    top: 73.98%;
+  }
+  .why-us-step-3 .why-us-number {
+    left: 8.33%;
+    top: 57.5%;
+  }
+  .why-us-step-3 .why-us-caption {
+    left: 8.33%;
+    top: 73.98%;
+  }
+  .why-us-step-4 .why-us-number {
+    left: 7.55%;
+    top: 50%;
+  }
+  .why-us-copy {
+    left: 62.92%;
+    top: 66.48%;
+    width: 32.24%;
+  }
+  .why-us-copy p {
+    margin: 0;
+  }
+  .why-us-copy p:first-child {
+    text-indent: 4.5em;
+  }
+  .why-us-dots {
+    position: absolute;
+    z-index: 3;
+    right: 1.15%;
+    top: 46.48%;
+    height: 7.04%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .why-us-dots button {
+    position: relative;
+    display: block;
+    width: 3px;
+    height: 3px;
+    padding: 0;
+    border: 0;
+    background: rgb(255 255 255 / 55%);
+    border-radius: 50%;
+  }
+  .why-us-dots button::after {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: -7px;
+    width: 17px;
+    height: 17px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 0.35s,
+      transform 0.35s;
+  }
+  .why-us-dots button[data-active='true']::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* ---------------------------------------------------------- awards */
+  .awards-section {
+    position: relative;
+    width: 100%;
+    padding: clamp(120px, 14vw, 240px) 0 clamp(120px, 14vw, 230px);
+    background: var(--color-paper);
+    overflow: hidden;
+  }
+  .awards-title {
+    position: absolute;
+    left: clamp(20px, 9.27vw, 9.27%);
+    top: clamp(40px, 6vw, 90px);
+    font-size: clamp(46px, 6.9vw, 112px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  /* -------------------------------------------------------- services */
+  .services-section {
+    position: relative;
+    width: 100%;
+    height: 342svh;
+    background: transparent;
+    color: #0f0f0e;
+    z-index: 2;
+  }
+  .services-viewport {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+  }
+  .services-stage {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+  }
+  .services-copy {
+    position: absolute;
+    inset-inline-start: 9.27%;
+    top: 51.76%;
+    width: 81.46%;
+  }
+  .services-eyebrow {
+    margin: 0 0 3.8svh;
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: clamp(16px, 1.25vw, 24px);
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -0.04em;
+  }
+  .services-titles {
+    display: grid;
+    align-items: start;
+    width: 100%;
+    min-height: 1.15em;
+  }
+  .services-title {
+    grid-area: 1 / 1;
+    width: 100%;
+    margin: 0;
+    color: #fff;
+    text-shadow: 0 2px 24px rgb(0 0 0 / 65%);
+    font-family: var(--font-sans);
+    font-size: clamp(42px, 7.8125vw, 150px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.35;
+    text-align: start;
+    will-change: transform, opacity;
+  }
+  .services-indicators {
+    position: absolute;
+    right: 0.6%;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .services-indicators button {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 25px;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+  .services-indicators button span {
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 45%);
+    transition:
+      background-color 0.3s,
+      transform 0.3s;
+  }
+  .services-indicators button[data-active='true'] span {
+    background: #fff;
+    transform: scale(1.7);
+  }
+}
+
+@media (max-width: 767px) {
+  .why-us-number {
+    font-size: clamp(64px, 18vw, 96px);
+  }
+  .why-us-caption,
+  .why-us-copy {
+    font-size: 16px;
+  }
+  .why-us-step .why-us-number {
+    left: 6%;
+    top: 70%;
+  }
+  .why-us-step .why-us-caption {
+    left: 6%;
+    top: 84%;
+  }
+  .why-us-step-2 .why-us-number,
+  .why-us-step-2 .why-us-caption {
+    left: auto;
+    right: 8%;
+  }
+  .why-us-step-4 .why-us-number {
+    top: 55%;
+    font-size: clamp(52px, 15vw, 76px);
+  }
+  .why-us-copy {
+    left: 6%;
+    top: 70%;
+    width: 86%;
+    font-size: 14px;
+  }
+  .why-us-copy p:first-child {
+    text-indent: 2em;
+  }
+  .why-us-dots {
+    right: 20px;
+    height: 76px;
+  }
+}
+
+@media (max-width: 899px) {
+  .services-copy {
+    inset-inline-start: 7%;
+    top: 26%;
+    width: 86%;
+    transform: translateY(-50%);
+    text-align: center;
+  }
+  .services-eyebrow {
+    margin-bottom: 24px;
+  }
+  .services-title {
+    font-size: clamp(38px, 10.5vw, 82px);
+    line-height: 1.15;
+    text-align: center;
+  }
+  .services-indicators {
+    right: 0;
+  }
+  .services-indicators button {
+    width: 28px;
+    height: 30px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-us-section {
+    height: auto;
+    min-height: 100svh;
+    background: #4a5157;
+  }
+  .why-us-steps {
+    position: relative;
+    display: grid;
+    gap: 36px;
+    padding: 80px 8%;
+  }
+  .why-us-step {
+    position: relative;
+    visibility: visible;
+    opacity: 1;
+  }
+  .why-us-step .why-us-number,
+  .why-us-step .why-us-caption,
+  .why-us-copy {
+    position: static;
+    width: auto;
+    white-space: normal;
+  }
+  .services-section {
+    height: auto;
+    min-height: 100svh;
+  }
+  .services-copy {
+    position: relative;
+    inset: auto;
+    width: auto;
+    padding: 20svh 7% 10svh;
+  }
+  .services-indicators {
+    display: none;
+  }
+  .services-titles {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(18px, 4vh, 40px);
+  }
+  .services-title {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    font-size: clamp(32px, 7vw, 72px);
+    will-change: auto;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Reduced motion
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

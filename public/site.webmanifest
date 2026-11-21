@@ -1,0 +1,13 @@
+{
+  "name": "Halden Studio",
+  "short_name": "Halden",
+  "description": "Independent creative and digital studio — websites, brand identity and e-commerce.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#202020",
+  "theme_color": "#f7c02f",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
